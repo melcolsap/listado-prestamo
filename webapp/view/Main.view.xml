@@ -1,0 +1,553 @@
+<mvc:View
+    controllerName="listadoprestamo.listadoprestamo.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    displayBlock="true">
+
+    <!-- Página principal de Listado de Préstamos. -->
+    <Page
+        id="page"
+        title="Listado de Préstamos">
+
+        <content>
+
+            <!-- Contenedor de parámetros de búsqueda. -->
+            <Panel
+                id="pnlBusqueda"
+                headerText="Parámetros de búsqueda"
+                expandable="true"
+                expanded="true">
+
+                <VBox
+                    id="vbBusqueda"
+                    width="100%"
+                    class="sapUiSmallMargin">
+
+                    <!-- Rango de órdenes. -->
+                    <HBox
+                        id="hbOrden"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblOrden"
+                            text="Orden"
+                            labelFor="inpOrdenDesde"
+                            width="8rem" />
+
+                        <Input
+                            id="inpOrdenDesde"
+                            width="12rem"
+                            maxLength="12"
+                            placeholder="Desde"
+                            showValueHelp="true"
+                            valueHelpOnly="false"
+                            valueHelpRequest=".onOrdenVHDesde" />
+
+                        <Text
+                            id="txtOrdenSeparador"
+                            text="A"
+                            class="sapUiSmallMarginBegin sapUiSmallMarginEnd" />
+
+                        <Input
+                            id="inpOrdenHasta"
+                            width="12rem"
+                            maxLength="12"
+                            placeholder="Hasta"
+                            showValueHelp="true"
+                            valueHelpOnly="false"
+                            valueHelpRequest=".onOrdenVHHasta" />
+
+                    </HBox>
+
+                    <!-- Rango de NIE. -->
+                    <HBox
+                        id="hbNie"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblNie"
+                            text="NIE"
+                            labelFor="inpNieDesde"
+                            width="8rem" />
+
+                        <Input
+                            id="inpNieDesde"
+                            width="12rem"
+                            maxLength="20"
+                            placeholder="Desde"
+                            showValueHelp="true"
+                            valueHelpRequest=".onNieVHDesde" />
+
+                        <Text
+                            id="txtNieSeparador"
+                            text="A"
+                            class="sapUiSmallMarginBegin sapUiSmallMarginEnd" />
+
+                        <Input
+                            id="inpNieHasta"
+                            width="12rem"
+                            maxLength="20"
+                            placeholder="Hasta"
+                            showValueHelp="true"
+                            valueHelpRequest=".onNieVHHasta" />
+
+                    </HBox>
+
+                    <!-- Rango de reservas. -->
+                    <HBox
+                        id="hbReserva"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblReserva"
+                            text="Reserva"
+                            labelFor="inpReservaDesde"
+                            width="8rem" />
+
+                        <Input
+                            id="inpReservaDesde"
+                            width="12rem"
+                            maxLength="20"
+                            placeholder="Desde"
+                            showValueHelp="true"
+                            valueHelpRequest=".onReservaVHDesde" />
+
+                        <Text
+                            id="txtReservaSeparador"
+                            text="A"
+                            class="sapUiSmallMarginBegin sapUiSmallMarginEnd" />
+
+                        <Input
+                            id="inpReservaHasta"
+                            width="12rem"
+                            maxLength="20"
+                            placeholder="Hasta"
+                            showValueHelp="true"
+                            valueHelpRequest=".onReservaVHHasta" />
+
+                    </HBox>
+
+                    <!-- Rango de fechas. -->
+                    <HBox
+                        id="hbFecha"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblFecha"
+                            text="Fecha"
+                            labelFor="dpFechaDesde"
+                            width="8rem" />
+
+                        <DatePicker
+                            id="dpFechaDesde"
+                            width="12rem"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd"
+                            placeholder="Desde" />
+
+                        <Text
+                            id="txtFechaSeparador"
+                            text="A"
+                            class="sapUiSmallMarginBegin sapUiSmallMarginEnd" />
+
+                        <DatePicker
+                            id="dpFechaHasta"
+                            width="12rem"
+                            displayFormat="dd/MM/yyyy"
+                            valueFormat="yyyy-MM-dd"
+                            placeholder="Hasta" />
+
+                    </HBox>
+
+                    <!-- Selección de centro. -->
+                    <HBox
+                        id="hbCentro"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblCentro"
+                            text="Centro"
+                            labelFor="cmbCentro"
+                            width="8rem" />
+
+                        <ComboBox
+                            id="cmbCentro"
+                            width="12rem"
+                            placeholder="Seleccione un centro"
+                            selectedKey=""
+                            showSecondaryValues="true"
+                            filterSecondaryValues="true"
+                            selectionChange=".onCentroChange"
+                            items="{centros>/centros}">
+
+                            <core:ListItem
+                                id="itemCentro"
+                                key="{centros>Werks}"
+                                text="{centros>Werks}"
+                                additionalText="{centros>Name1}" />
+
+                        </ComboBox>
+
+                    </HBox>
+
+                    <!-- Ayuda de emplazamiento dependiente del centro. -->
+                    <HBox
+                        id="hbEmplazamiento"
+                        alignItems="Center"
+                        class="sapUiTinyMarginBottom">
+
+                        <Label
+                            id="lblEmplazamiento"
+                            text="Emplazamiento"
+                            labelFor="inpEmplazamiento"
+                            width="8rem" />
+
+                        <Input
+                            id="inpEmplazamiento"
+                            width="18rem"
+                            maxLength="10"
+                            placeholder="Seleccione un emplazamiento"
+                            showValueHelp="true"
+                            valueHelpOnly="true"
+                            valueHelpRequest=".onEmplazamientoVH" />
+
+                    </HBox>
+
+                    <!-- Acciones de la búsqueda. -->
+                    <HBox
+                        id="hbBotones"
+                        width="76rem"
+                        justifyContent="End"
+                        alignItems="Center"
+                        class="sapUiSmallMarginTop">
+
+                        <Button
+                            id="btnLimpiar"
+                            text="Limpiar"
+                            icon="sap-icon://clear-filter"
+                            type="Transparent"
+                            press=".onLimpiar" />
+
+                        <Button
+                            id="btnBuscar"
+                            text="Aceptar"
+                            icon="sap-icon://search"
+                            type="Emphasized"
+                            class="sapUiTinyMarginBegin"
+                            press=".onBuscar" />
+
+                    </HBox>
+
+                    <!-- Selector de vista. -->
+                    <HBox
+                        id="hbVista"
+                        alignItems="Center"
+                        class="sapUiMediumMarginTop">
+
+                        <Label
+                            id="lblVista"
+                            text="Vista:"
+                            labelFor="selVista"
+                            width="4rem" />
+
+                        <Select
+                            id="selVista"
+                            width="14rem"
+                            selectedKey="STD"
+                            change=".onCambiarVista">
+
+                            <items>
+
+                                <core:Item
+                                    id="itemVistaEstandar"
+                                    key="STD"
+                                    text="Vista estándar" />
+
+                            </items>
+
+                        </Select>
+
+                    </HBox>
+
+                    <!-- Resultados de la consulta. -->
+                    <Panel
+                        id="pnlResultados"
+                        expandable="true"
+                        expanded="true"
+                        class="sapUiSmallMarginTop">
+
+                        <headerToolbar>
+
+                            <OverflowToolbar id="toolbarResultados">
+
+                                <Title
+                                    id="titleResultados"
+                                    text="Resultados de Listado de Préstamos"
+                                    level="H3" />
+
+                                <ObjectStatus
+                                    id="statusCantidad"
+                                    text="{= ${local>/prestamos}.length + ' registro(s)' }"
+                                    state="None"
+                                    class="sapUiTinyMarginBegin" />
+
+                                <ToolbarSpacer id="spacerResultados" />
+
+                                <!-- Exporta los registros cargados a Excel. -->
+                                <Button
+                                    id="btnExportarExcelHeader"
+                                    text="Excel"
+                                    icon="sap-icon://excel-attachment"
+                                    type="Transparent"
+                                    press=".onExportarExcel" />
+
+                            </OverflowToolbar>
+
+                        </headerToolbar>
+
+                        <!-- Permite desplazamiento horizontal por la cantidad de columnas. -->
+                        <ScrollContainer
+                            id="scResultados"
+                            horizontal="true"
+                            vertical="false"
+                            width="100%"
+                            class="sapUiSmallMarginTop">
+
+                            <Table
+                                id="tblPrestamos"
+                                width="120rem"
+                                items="{local>/prestamos}"
+                                noDataText="No se encontraron préstamos"
+                                sticky="ColumnHeaders"
+                                growing="true"
+                                growingThreshold="20"
+                                growingScrollToLoad="false"
+                                mode="SingleSelectMaster"
+                                itemPress=".onPrestamoPress">
+
+                                <columns>
+
+                                    <Column
+                                        id="colOrden"
+                                        width="8rem">
+                                        <Text
+                                            id="txtColOrden"
+                                            text="Orden" />
+                                    </Column>
+
+                                    <Column
+                                        id="colReserva"
+                                        width="8rem">
+                                        <Text
+                                            id="txtColReserva"
+                                            text="Reserva" />
+                                    </Column>
+
+                                    <Column
+                                        id="colPedClte"
+                                        width="9rem">
+                                        <Text
+                                            id="txtColPedClte"
+                                            text="Ped. Cliente" />
+                                    </Column>
+
+                                    <Column
+                                        id="colAma"
+                                        width="6rem">
+                                        <Text
+                                            id="txtColAma"
+                                            text="AMa" />
+                                    </Column>
+
+                                    <Column
+                                        id="colDenomObjTecnico"
+                                        width="15rem">
+                                        <Text
+                                            id="txtColDenomObjTecnico"
+                                            text="Denominación objeto técnico" />
+                                    </Column>
+
+                                    <Column
+                                        id="colDenominacion"
+                                        width="15rem">
+                                        <Text
+                                            id="txtColDenominacion"
+                                            text="Denominación" />
+                                    </Column>
+
+                                    <Column
+                                        id="colStatusSistema"
+                                        width="11rem">
+                                        <Text
+                                            id="txtColStatusSistema"
+                                            text="Status sistema" />
+                                    </Column>
+
+                                    <Column
+                                        id="colEquipo"
+                                        width="9rem">
+                                        <Text
+                                            id="txtColEquipo"
+                                            text="Equipo" />
+                                    </Column>
+
+                                    <Column
+                                        id="colCentro"
+                                        width="7rem">
+                                        <Text
+                                            id="txtColCentro"
+                                            text="Centro" />
+                                    </Column>
+
+                                    <Column
+                                        id="colNumeroSerieFabricante"
+                                        width="13rem">
+                                        <Text
+                                            id="txtColNumeroSerieFabricante"
+                                            text="Serie fabricante" />
+                                    </Column>
+
+                                    <Column
+                                        id="colPtoTrbRes"
+                                        width="10rem">
+                                        <Text
+                                            id="txtColPtoTrbRes"
+                                            text="Pto. trabajo" />
+                                    </Column>
+
+                                    <Column
+                                        id="colCosto"
+                                        width="9rem"
+                                        hAlign="End">
+                                        <Text
+                                            id="txtColCosto"
+                                            text="Costo" />
+                                    </Column>
+
+                                    <Column
+                                        id="colFecha"
+                                        width="9rem">
+                                        <Text
+                                            id="txtColFecha"
+                                            text="Creado el" />
+                                    </Column>
+
+                                    <Column
+                                        id="colStatusUsuario"
+                                        width="11rem">
+                                        <Text
+                                            id="txtColStatusUsuario"
+                                            text="Status usuario" />
+                                    </Column>
+
+                                    <Column
+                                        id="colEmplazamiento"
+                                        width="10rem">
+                                        <Text
+                                            id="txtColEmplazamiento"
+                                            text="Emplazamiento" />
+                                    </Column>
+
+                                </columns>
+
+                                <items>
+
+                                    <!-- RowHighlight deja preparada la representación del estado funcional. -->
+                                    <ColumnListItem
+                                        id="rowPrestamo"
+                                        type="Active"
+                                        highlight="{local>RowHighlight}">
+
+                                        <cells>
+
+                                            <Text
+                                                id="txtOrdenFila"
+                                                text="{local>Orden}" />
+
+                                            <Text
+                                                id="txtReservaFila"
+                                                text="{local>Reserva}" />
+
+                                            <Text
+                                                id="txtPedClteFila"
+                                                text="{local>PedClte}" />
+
+                                            <Text
+                                                id="txtAmaFila"
+                                                text="{local>Ama}" />
+
+                                            <Text
+                                                id="txtDenomObjTecnicoFila"
+                                                text="{local>DenomObjTecnico}"
+                                                wrapping="false"
+                                                tooltip="{local>DenomObjTecnico}" />
+
+                                            <Text
+                                                id="txtDenominacionFila"
+                                                text="{local>Denominacion}"
+                                                wrapping="false"
+                                                tooltip="{local>Denominacion}" />
+
+                                            <Text
+                                                id="txtStatusSistemaFila"
+                                                text="{local>StatusSistema}" />
+
+                                            <Text
+                                                id="txtEquipoFila"
+                                                text="{local>Equipo}" />
+
+                                            <Text
+                                                id="txtCentroFila"
+                                                text="{local>Centro}" />
+
+                                            <Text
+                                                id="txtNumeroSerieFabricanteFila"
+                                                text="{local>NumeroSerieFabricante}" />
+
+                                            <Text
+                                                id="txtPtoTrbResFila"
+                                                text="{local>PtoTrbRes}" />
+
+                                            <ObjectNumber
+                                                id="objCostoFila"
+                                                number="{local>SumCosReal}" />
+
+                                            <Text
+                                                id="txtCreadoElFila"
+                                                text="{local>CreadoEl}" />
+
+                                            <Text
+                                                id="txtStatusUsuarioFila"
+                                                text="{local>StatusUsuario}" />
+
+                                            <Text
+                                                id="txtEmplazamientoFila"
+                                                text="{local>Emplazamiento}" />
+
+                                        </cells>
+
+                                    </ColumnListItem>
+
+                                </items>
+
+                            </Table>
+
+                        </ScrollContainer>
+
+                    </Panel>
+
+                </VBox>
+
+            </Panel>
+
+        </content>
+
+    </Page>
+
+</mvc:View>
